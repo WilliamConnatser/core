@@ -15,9 +15,9 @@ import { Logo } from "./Logo";
 import useCitadel from "./hooks/useCitadel";
 
 export const App = () => {
-  const { node, citadel, online } = useCitadel();
+  const { node, online } = useCitadel();
 
-  const prettyJson = (x: any) => (x ? JSON.stringify(x, null, 5) : null);
+  const prettyJson = (x: any) => JSON.stringify(x, null, 5);
 
   return (
     <ChakraProvider theme={theme}>
@@ -26,12 +26,15 @@ export const App = () => {
           <ColorModeSwitcher justifySelf="flex-end" />
           <VStack spacing={8}>
             <Logo h="40vmin" pointerEvents="none" />
-            {[node, citadel, online].map((x) => (
+            {[
+              { value: node, text: "Node" },
+              { value: online, text: "Online" },
+            ].map(({ text, value }) => (
               <>
-                <Heading>Node:</Heading>
-                <Text>
-                  <Code fontSize="xl">{prettyJson(x)}</Code>
-                </Text>
+                <Heading>{text}</Heading>
+                <Code fontSize="xl">
+                  {value ? prettyJson(value) : <Text>"Loading..."</Text>}
+                </Code>
               </>
             ))}
           </VStack>
